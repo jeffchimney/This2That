@@ -1,0 +1,5 @@
+dawk
+gawk
+gawp
+gowk
+hawk

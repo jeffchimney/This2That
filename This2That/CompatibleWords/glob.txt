@@ -1,0 +1,7 @@
+blob
+glib
+glob
+glom
+glop
+glow
+slob

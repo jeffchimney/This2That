@@ -1,0 +1,5 @@
+quid
+quin
+quip
+quit
+quiz

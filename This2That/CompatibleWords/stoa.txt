@@ -1,0 +1,4 @@
+stoa
+stob
+stop
+stow

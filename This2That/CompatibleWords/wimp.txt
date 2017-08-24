@@ -1,0 +1,7 @@
+gimp
+jimp
+limp
+pimp
+simp
+wimp
+wisp

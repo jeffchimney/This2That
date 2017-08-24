@@ -1,0 +1,11 @@
+lacs
+macs
+pacs
+sacs
+vacs
+vans
+vars
+vats
+vaus
+vavs
+vaws

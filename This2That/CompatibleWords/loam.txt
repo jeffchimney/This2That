@@ -1,0 +1,7 @@
+foam
+load
+loaf
+loam
+loan
+loom
+roam

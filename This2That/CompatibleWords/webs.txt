@@ -1,0 +1,9 @@
+debs
+nebs
+rebs
+wabs
+webs
+weds
+wees
+wens
+wets

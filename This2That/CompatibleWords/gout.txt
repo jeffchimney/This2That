@@ -1,0 +1,8 @@
+bout
+glut
+goat
+gout
+lout
+pout
+rout
+tout

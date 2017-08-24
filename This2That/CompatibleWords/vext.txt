@@ -1,0 +1,7 @@
+next
+sext
+text
+vent
+vert
+vest
+vext

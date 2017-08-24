@@ -1,0 +1,10 @@
+burl
+curl
+furl
+harl
+herl
+hull
+hurl
+hurt
+nurl
+purl

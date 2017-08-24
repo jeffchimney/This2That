@@ -1,0 +1,11 @@
+burl
+curl
+furl
+hurl
+nurl
+pull
+pure
+puri
+purl
+purr
+purs

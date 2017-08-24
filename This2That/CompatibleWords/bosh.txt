@@ -1,0 +1,12 @@
+bash
+bosh
+bosk
+boss
+both
+bush
+cosh
+gosh
+josh
+nosh
+posh
+tosh

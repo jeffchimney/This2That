@@ -1,0 +1,9 @@
+gimp
+jimp
+limp
+pima
+pimp
+pomp
+pump
+simp
+wimp

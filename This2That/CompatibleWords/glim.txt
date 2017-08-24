@@ -1,0 +1,7 @@
+glia
+glib
+glim
+glom
+glum
+grim
+slim

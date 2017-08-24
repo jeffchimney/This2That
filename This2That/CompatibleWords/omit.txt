@@ -1,0 +1,4 @@
+emit
+obit
+omit
+smit

@@ -1,0 +1,14 @@
+bail
+fail
+hail
+jail
+jarl
+kail
+mail
+nail
+pail
+rail
+sail
+tail
+vail
+wail

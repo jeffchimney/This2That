@@ -1,0 +1,5 @@
+knap
+knob
+knop
+knot
+know

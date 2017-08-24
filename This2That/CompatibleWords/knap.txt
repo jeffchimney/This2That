@@ -1,0 +1,4 @@
+knap
+knar
+knop
+snap

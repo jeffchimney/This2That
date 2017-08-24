@@ -1,0 +1,14 @@
+bash
+cash
+dash
+fash
+fast
+fish
+gash
+hash
+lash
+mash
+pash
+rash
+sash
+wash

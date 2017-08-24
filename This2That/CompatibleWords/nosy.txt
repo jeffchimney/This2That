@@ -1,0 +1,6 @@
+cosy
+nose
+nosh
+nosy
+posy
+rosy

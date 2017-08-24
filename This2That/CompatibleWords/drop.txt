@@ -1,0 +1,5 @@
+crop
+drip
+drop
+prop
+trop

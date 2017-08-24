@@ -1,0 +1,4 @@
+opal
+orad
+oral
+oval

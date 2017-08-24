@@ -1,0 +1,11 @@
+burl
+curl
+farl
+fuel
+full
+furl
+furs
+fury
+hurl
+nurl
+purl

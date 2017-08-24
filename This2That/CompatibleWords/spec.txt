@@ -1,0 +1,4 @@
+spec
+sped
+spew
+spic

@@ -1,0 +1,13 @@
+boot
+coot
+font
+food
+fool
+foot
+fort
+hoot
+loot
+moot
+root
+soot
+toot
