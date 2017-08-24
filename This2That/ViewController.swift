@@ -11,8 +11,9 @@ import CoreData
 import Social
 import AVFoundation
 import StoreKit
+import GoogleMobileAds
 
-class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver, GADBannerViewDelegate {
     //UI Elements
     @IBOutlet var scoreThisGame: UILabel!
     @IBOutlet var highScore: UILabel!
@@ -45,6 +46,8 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     var product_id1: NSString?
     var product_id2: NSString?
     var currentlyBuying :Int?
+    
+    @IBOutlet weak var bannerView: GADBannerView!
     
     override func viewDidLoad() {
         
@@ -88,8 +91,8 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         nextWord.backgroundColor = UIColorFromHex(rgbValue: 0x4E81B7)
         nextWord.layer.cornerRadius = 5
         nextWord.titleLabel!.textColor = UIColorFromHex(rgbValue: 0x93ACE7)
-        storeButton.backgroundColor = UIColorFromHex(rgbValue: 0x4E81B7)
-        storeButton.layer.cornerRadius = 5
+        //storeButton.backgroundColor = UIColorFromHex(rgbValue: 0x4E81B7)
+        //storeButton.layer.cornerRadius = 5
         //storeButton.titleLabel!.textColor = UIColorFromHex(rgbValue: 0x93ACE7)
         
         // social media button appearance
@@ -105,6 +108,13 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         //twitterButton.layer.cornerRadius = 5
         //twitterButton.layer.borderWidth = 1
         //twitterButton.layer.borderColor = UIColorFromHex(rgbValue: 0x4E81B7).cgColor
+        
+        bannerView.rootViewController = self
+        bannerView.delegate = self
+        bannerView.adSize = kGADAdSizeBanner
+        bannerView.adUnitID = "ca-app-pub-4389649708318146/8092837312"
+        
+        bannerView.load(GADRequest())
     }
     
     // retrieve current and high scores when view appears
@@ -145,7 +155,7 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     }
     
     func randomizeWordFromText(seedWord: String) -> String {
-        let seed_word_array = arrayFromContentsOfFileWithName(fileName: "CompatibleWords/" + seedWord)!
+        let seed_word_array = arrayFromContentsOfFileWithName(fileName: seedWord)!
         let randomizeIndex = Int(arc4random_uniform(UInt32(seed_word_array.count - 1)))
         return seed_word_array[randomizeIndex]
     }
@@ -274,78 +284,54 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     @IBAction func getNextWords(sender: UIButton) {
         // if hasnt bought free skips yet
         if numberOfFreeSkips == 0 {
-            let alertController = UIAlertController(title: "You sure?", message:
-            "You'll lose your streak!", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Buy Two Skips (Won't reset score)", style: UIAlertActionStyle.default,handler:{
-                (alert: UIAlertAction!) in
-                self.currentlyBuying = 1
+            // play change word sound
+            self.playSoundWithName(fileName: "successfulWordChange")
             
-                if (SKPaymentQueue.canMakePayments()) {
-                    let productID:NSSet = NSSet(object: self.product_id1!);
-                    let productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>);
-                    productsRequest.delegate = self;
-                    productsRequest.start();
-                    //print("Fetching Products");
-                }else{
-                    //print("can't make purchases");
-                }
-            }))
-        
-            alertController.addAction(UIAlertAction(title: "Skip", style: UIAlertActionStyle.default,handler:{
-            (alert: UIAlertAction!) in
-                // play change word sound
-                self.playSoundWithName(fileName: "successfulWordChange")
-            
-                //increment adcounter
-                if self.hasPaidToRemoveAds != true {
-                    self.adCount = self.adCount + 1
-                    if self.adCount >= 20 {
+            //increment adcounter
+            if self.hasPaidToRemoveAds != true {
+                self.adCount = self.adCount + 1
+                if self.adCount >= 20 {
 //                        self.showAd()
-                        self.adCount = 0
-                    }
+                    self.adCount = 0
                 }
+            }
             
-                self.successfulWords.removeAll()
+            self.successfulWords.removeAll()
             
-                self.startWord.text = self.randomizeWord()
-                self.randomWordsChosen.append(self.startWord.text!)
-                var intermediateWord = self.randomizeWordFromText(seedWord: self.startWord.text!)
+            self.startWord.text = self.randomizeWord()
+            self.randomWordsChosen.append(self.startWord.text!)
+            var intermediateWord = self.randomizeWordFromText(seedWord: self.startWord.text!)
             
-                var i = 0
-                while (i < 20) {
-                    if self.randomWordsChosen.contains(intermediateWord) {
-                        intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
-                    } else {
-                        self.randomWordsChosen.append(intermediateWord)
-                        intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
-                        i = i + 1
-                    }
-                }
-            
-                self.endWord.text = intermediateWord
-                self.randomWordsChosen = []
-            
-                self.successfulWords.removeAll()
-                self.successfulWords.append(self.startWord.text!)
-                if self.numberOfFreeSkips > 0 {
-                    self.numberOfFreeSkips = self.numberOfFreeSkips-1
-                    self.nextWord.setTitle(String(self.numberOfFreeSkips), for: UIControlState.normal)
-                    if self.numberOfFreeSkips == 0 {
-                        self.nextWord.setTitle("Skip", for: UIControlState.normal)
-                    } else {
-                        self.nextWord.setTitle(String(self.numberOfFreeSkips), for: UIControlState.normal)
-                    }
+            var i = 0
+            while (i < 20) {
+                if self.randomWordsChosen.contains(intermediateWord) {
+                    intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
                 } else {
-                    self.scoreThisGame.text! = "0"
-                    self.nextWord.setTitle("Skip", for: UIControlState.normal)
+                    self.randomWordsChosen.append(intermediateWord)
+                    intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
+                    i = i + 1
                 }
+            }
             
-                self.saveScores(highScoreSave: self.highScore.text!, currentScoreSave: self.scoreThisGame.text!, currentNumberSkips: self.numberOfFreeSkips)
-            }))
+            self.endWord.text = intermediateWord
+            self.randomWordsChosen = []
             
-            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default,handler: nil))
-        
-            self.present(alertController, animated: true, completion: nil)
+            self.successfulWords.removeAll()
+            self.successfulWords.append(self.startWord.text!)
+            if self.numberOfFreeSkips > 0 {
+                self.numberOfFreeSkips = self.numberOfFreeSkips-1
+                self.nextWord.setTitle(String(self.numberOfFreeSkips), for: UIControlState.normal)
+                if self.numberOfFreeSkips == 0 {
+                    self.nextWord.setTitle("Skip", for: UIControlState.normal)
+                } else {
+                    self.nextWord.setTitle(String(self.numberOfFreeSkips), for: UIControlState.normal)
+                }
+            } else {
+                self.scoreThisGame.text! = "0"
+                self.nextWord.setTitle("Skip", for: UIControlState.normal)
+            }
+            
+            self.saveScores(highScoreSave: self.highScore.text!, currentScoreSave: self.scoreThisGame.text!, currentNumberSkips: self.numberOfFreeSkips)
         } else {
             // has bought free skips and still has some left, only choose new words and save
             // play change word sound
@@ -606,91 +592,87 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     }
     
     ////////////////////////////////// AD FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//    func closeAd() {
-//        adFinished()
-//        currentWord.becomeFirstResponder()
-//    }
+    /// Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("adViewDidReceiveAd")
+        bannerView.alpha = 0
+        view.addSubview(bannerView)
+        UIView.animate(withDuration: 1, animations: {
+            bannerView.alpha = 1
+        })
+    }
     
-//    func adFinished() {
-//        closeAdButton.removeFromSuperview()
-//        interAdView.removeFromSuperview()
-//    }
-//    
-//    func showAd() {
-//        loadAd()
-//    }
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+                didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
     
-//    func loadAd() {
-//        //print("load ad")
-//        interAd = ADInterstitialAd()
-//        interAd.delegate = self as! ADInterstitialAdDelegate
-//    }
-//    
-//    func interstitialAdDidLoad(interstitialAd: ADInterstitialAd!) {
-//        //print("Ad did load")
-//        currentWord.resignFirstResponder()
-//        
-//        interAdView = UIView()
-//        interAdView.frame = self.view.bounds
-//        self.view.addSubview(interAdView)
-//        
-//        interAd.present(in: interAdView)
-//        UIViewController.prepareInterstitialAds()
-//        
-//        self.interAdView.addSubview(closeAdButton)
-//    }
-//    
-//    func interstitialAdDidUnload(interstitialAd: ADInterstitialAd!) {
-//        //print("Ad unloaded")
-//        currentWord.becomeFirstResponder()
-//    }
+    /// Tells the delegate that a full screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+    }
     
-    // This is called if the user clicks into the interstitial, and then finishes interacting with the ad
-    // We'll call our adFinished function since we're returning to our app:
-//    func interstitialAdActionDidFinish(interstitialAd: ADInterstitialAd!) {
-//        //print(" --- Ad Action Finished --- ")
-//        adFinished()
-//        //open keyboard
-//        currentWord.becomeFirstResponder()
-//    }
-//    
-//    func interstitialAd(interstitialAd: ADInterstitialAd!, didFailWithError error: NSError!) {
-//        //print("failed to receive")
-//        //print(error.localizedDescription)
-//        
-//        closeAdButton.removeFromSuperview()
-//        interAdView.removeFromSuperview()
-//    }
+    /// Tells the delegate that the full screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+    }
     
-//    @IBAction func payForAds(sender: AnyObject) {
-//        let alertController = UIAlertController(title: "Get Rid of Ads", message:
-//            "Tired of being interrupted?", preferredStyle: UIAlertControllerStyle.alert)
-//        alertController.addAction(UIAlertAction(title: "Disable Ads ($0.99)", style: UIAlertActionStyle.default,handler:{
-//            (alert: UIAlertAction!) in
-//            self.currentlyBuying = 2
-//            
-//            if (SKPaymentQueue.canMakePayments())
-//            {
-//                let productID:NSSet = NSSet(object: self.product_id2!);
-//                let productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>);
-//                productsRequest.delegate = self;
-//                productsRequest.start();
-//                //print("Fetching Products");
-//            }else{
-//                //print("can't make purchases");
-//            }
-//        }))
-//        alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.default,handler:{
-//            (alert: UIAlertAction!) in
-//            if (SKPaymentQueue.canMakePayments()) {
-//                //print("restoring purchases")
-//                SKPaymentQueue.default().restoreCompletedTransactions()
-//            }
-//        }))
-//        alertController.addAction(UIAlertAction(title: "Not Right Now", style: UIAlertActionStyle.default,handler: nil))
-//        
-//        self.present(alertController, animated: true, completion: nil)
-//    }
+    /// Tells the delegate that the full screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+    }
+    
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+    }
+    
+    @IBAction func payForAds(sender: AnyObject) {
+        let alertController = UIAlertController(title: "Store", message:
+            "", preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "Disable Ads", style: UIAlertActionStyle.default,handler:{
+            (alert: UIAlertAction!) in
+            self.currentlyBuying = 2
+            
+            if (SKPaymentQueue.canMakePayments())
+            {
+                let productID:NSSet = NSSet(object: self.product_id2!);
+                let productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>);
+                productsRequest.delegate = self;
+                productsRequest.start();
+                //print("Fetching Products");
+            }else{
+                //print("can't make purchases");
+            }
+        }))
+        alertController.addAction(UIAlertAction(title: "Two Free Skips", style: UIAlertActionStyle.default,handler:{
+            (alert: UIAlertAction!) in
+            self.currentlyBuying = 1
+            
+            if (SKPaymentQueue.canMakePayments()) {
+                let productID:NSSet = NSSet(object: self.product_id1!);
+                let productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>);
+                productsRequest.delegate = self;
+                productsRequest.start();
+                //print("Fetching Products");
+            }else{
+                //print("can't make purchases");
+            }
+        }))
+        alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.default,handler:{
+            (alert: UIAlertAction!) in
+            if (SKPaymentQueue.canMakePayments()) {
+                //print("restoring purchases")
+                SKPaymentQueue.default().restoreCompletedTransactions()
+            }
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel ,handler: nil))
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
     
 ////////////////////////////////// STORE KIT \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     func buyProduct(product: SKProduct){
@@ -708,14 +690,14 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
             _ = response.products
             let selectedProduct: SKProduct = response.products[0] as SKProduct
             if (selectedProduct.productIdentifier == "turnOffAds")  {
-                //print(selectedProduct.localizedTitle)
-                //print(selectedProduct.localizedDescription)
-                //print(selectedProduct.price)
+                print(selectedProduct.localizedTitle)
+                print(selectedProduct.localizedDescription)
+                print(selectedProduct.price)
                 buyProduct(product: selectedProduct);
             } else {
-                //print(selectedProduct.localizedTitle)
-                //print(selectedProduct.localizedDescription)
-                //print(selectedProduct.price)
+                print(selectedProduct.localizedTitle)
+                print(selectedProduct.localizedDescription)
+                print(selectedProduct.price)
                 buyProduct(product: selectedProduct)
             }
         } else {
