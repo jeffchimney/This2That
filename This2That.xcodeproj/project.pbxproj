@@ -11812,6 +11812,14 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = JSZY8AYXNH;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 0;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+						};
 					};
 					BEF83FB21F4F363C00DD4B52 = {
 						CreatedOnToolsVersion = 8.3.3;

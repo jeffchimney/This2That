@@ -33,6 +33,7 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     var numberOfFreeSkips: Int! = 0
     var adCount: Int!
     var hasPaidToRemoveAds = false
+    var keyboardHeight: CGFloat = 0
     
     // set up audio player and controls
     var audioPlayer = AVAudioPlayer()
@@ -48,6 +49,8 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     var currentlyBuying :Int?
     
     @IBOutlet weak var bannerView: GADBannerView!
+    @IBOutlet weak var bannerViewTopConstraint: NSLayoutConstraint!
+    var isShowingAd = false
     
     override func viewDidLoad() {
         
@@ -91,23 +94,12 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         nextWord.backgroundColor = UIColorFromHex(rgbValue: 0x4E81B7)
         nextWord.layer.cornerRadius = 5
         nextWord.titleLabel!.textColor = UIColorFromHex(rgbValue: 0x93ACE7)
-        //storeButton.backgroundColor = UIColorFromHex(rgbValue: 0x4E81B7)
-        //storeButton.layer.cornerRadius = 5
-        //storeButton.titleLabel!.textColor = UIColorFromHex(rgbValue: 0x93ACE7)
         
         // social media button appearance
         helpButton.backgroundColor = UIColorFromHex(rgbValue: 0x4E81B7)
         helpButton.layer.cornerRadius = 5
         helpButton.titleLabel!.textColor = UIColorFromHex(rgbValue: 0x93ACE7)
         helpButton.layer.borderColor = UIColorFromHex(rgbValue: 0x4E81B7).cgColor
-        //facebookButton.backgroundColor = UIColor.clear
-        //facebookButton.layer.cornerRadius = 5
-        //facebookButton.layer.borderWidth = 1
-        //facebookButton.layer.borderColor = UIColorFromHex(rgbValue: 0x4E81B7).cgColor
-        //twitterButton.backgroundColor = UIColor.clear
-        //twitterButton.layer.cornerRadius = 5
-        //twitterButton.layer.borderWidth = 1
-        //twitterButton.layer.borderColor = UIColorFromHex(rgbValue: 0x4E81B7).cgColor
         
         bannerView.rootViewController = self
         bannerView.delegate = self
@@ -115,9 +107,6 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         bannerView.adUnitID = "ca-app-pub-4389649708318146/8092837312"
         
         bannerView.load(GADRequest())
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // retrieve current and high scores when view appears
@@ -137,6 +126,10 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        currentWord.resignFirstResponder()
     }
 
     func arrayFromContentsOfFileWithName(fileName: String) -> [String]? {
@@ -170,10 +163,12 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         if hasPaidToRemoveAds != true {
             adCount = adCount + 1
             if adCount >= 20 {
-//                showAd()
-                adCount = 0
-                //print(adCount)
+                if !isShowingAd {
+                    bannerView.load(GADRequest())
+                    adCount = 0
+                }
             }
+            print(adCount)
         }
     
         // check if word is in word_list array and play failure noise if not
@@ -189,20 +184,6 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         
         }
         return(false)
-    }
-    
-    func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= keyboardSize.height
-            }
-        }
-    }
-    
-    func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            self.view.frame.origin.y += keyboardSize.height
-        }
     }
 
     @IBAction func muteUnmute(sender: AnyObject) {
@@ -286,32 +267,23 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
                 // this avoids cheating by exitting out of the game and getting new words.
                 self.saveScores(highScoreSave: highScore.text!, currentScoreSave: scoreThisGame.text!, currentNumberSkips: numberOfFreeSkips)
                 
-                return(true)
+                return true
             } else {
                 // play failure sound
                 playSoundWithName(fileName: "failure")
-                return(false)
+                return false
             }
         } else {
             // play failure sound
             playSoundWithName(fileName: "failure")
-            return(false)
+            return false
         }
     }
     @IBAction func getNextWords(sender: UIButton) {
         // if hasnt bought free skips yet
         if numberOfFreeSkips == 0 {
             // play change word sound
-            self.playSoundWithName(fileName: "successfulWordChange")
-            
-            //increment adcounter
-            if self.hasPaidToRemoveAds != true {
-                self.adCount = self.adCount + 1
-                if self.adCount >= 20 {
-//                        self.showAd()
-                    self.adCount = 0
-                }
-            }
+            //self.playSoundWithName(fileName: "successfulWordChange")
             
             self.successfulWords.removeAll()
             
@@ -320,14 +292,14 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
             var intermediateWord = self.randomizeWordFromText(seedWord: self.startWord.text!)
             
             var i = 0
-            while (i < 20) {
-                if self.randomWordsChosen.contains(intermediateWord) {
-                    intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
-                } else {
-                    self.randomWordsChosen.append(intermediateWord)
-                    intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
-                    i = i + 1
-                }
+            while (i < 30) {
+                //if self.randomWordsChosen.contains(intermediateWord) {
+                intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
+//                } else {
+//                    self.randomWordsChosen.append(intermediateWord)
+//                    intermediateWord = self.randomizeWordFromText(seedWord: intermediateWord)
+                i = i + 1
+                //}
             }
             
             self.endWord.text = intermediateWord
@@ -370,14 +342,14 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
             var intermediateWord = randomizeWordFromText(seedWord: startWord.text!)
             
             var i = 0
-            while (i < 20) {
-                if randomWordsChosen.contains(intermediateWord) {
-                    intermediateWord = randomizeWordFromText(seedWord: intermediateWord)
-                } else {
-                    randomWordsChosen.append(intermediateWord)
-                    intermediateWord = randomizeWordFromText(seedWord: intermediateWord)
-                    i = i + 1
-                }
+            while (i < 30) {
+                //if randomWordsChosen.contains(intermediateWord) {
+                intermediateWord = randomizeWordFromText(seedWord: intermediateWord)
+                //} else {
+                //    randomWordsChosen.append(intermediateWord)
+                //    intermediateWord = randomizeWordFromText(seedWord: intermediateWord)
+                i = i + 1
+                //}
             }
             
             endWord.text = intermediateWord
@@ -611,17 +583,25 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     ////////////////////////////////// AD FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     /// Tells the delegate an ad request loaded an ad.
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        isShowingAd = true
         print("adViewDidReceiveAd")
         bannerView.alpha = 0
         view.addSubview(bannerView)
+        bannerViewTopConstraint.constant = 0
         UIView.animate(withDuration: 1, animations: {
             bannerView.alpha = 1
+            self.view.layoutIfNeeded()
         })
     }
     
     /// Tells the delegate an ad request failed.
     func adView(_ bannerView: GADBannerView,
                 didFailToReceiveAdWithError error: GADRequestError) {
+        isShowingAd = false
+        bannerViewTopConstraint.constant = -51
+        UIView.animate(withDuration: 1, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+        })
         print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
     }
     
@@ -629,26 +609,26 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     /// to the user clicking on an ad.
     func adViewWillPresentScreen(_ bannerView: GADBannerView) {
         print("adViewWillPresentScreen")
-        currentWord.becomeFirstResponder()
     }
     
     /// Tells the delegate that the full screen view will be dismissed.
     func adViewWillDismissScreen(_ bannerView: GADBannerView) {
         print("adViewWillDismissScreen")
-        currentWord.becomeFirstResponder()
     }
     
     /// Tells the delegate that the full screen view has been dismissed.
     func adViewDidDismissScreen(_ bannerView: GADBannerView) {
         print("adViewDidDismissScreen")
-        currentWord.becomeFirstResponder()
     }
     
     /// Tells the delegate that a user click will open another app (such as
     /// the App Store), backgrounding the current app.
     func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
         print("adViewWillLeaveApplication")
-        currentWord.becomeFirstResponder()
+    }
+    
+    @IBAction func helpButtonPushed(_ sender: Any) {
+        
     }
     
     @IBAction func payForAds(sender: AnyObject) {
