@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		505CA5C39B25FA88CA7AF553 /* libPods-This2That.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BFD0ED3872EE0DDF5E32259 /* libPods-This2That.a */; };
 		BE8439381F4F485100FCBB55 /* word_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = BE8439371F4F485100FCBB55 /* word_list.txt */; };
+		BE99071B1F50EF430071F448 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE99071A1F50EF430071F448 /* GameKit.framework */; };
+		BE99071D1F50EF490071F448 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE99071C1F50EF490071F448 /* StoreKit.framework */; };
 		BEA776751F4F701800B4EA62 /* aahs.txt in Resources */ = {isa = PBXBuildFile; fileRef = BEA758511F4F615B00B4EA62 /* aahs.txt */; };
 		BEA776761F4F701800B4EA62 /* aals.txt in Resources */ = {isa = PBXBuildFile; fileRef = BEA758521F4F615B00B4EA62 /* aals.txt */; };
 		BEA776771F4F701800B4EA62 /* abas.txt in Resources */ = {isa = PBXBuildFile; fileRef = BEA758531F4F615B00B4EA62 /* abas.txt */; };
@@ -3899,6 +3901,8 @@
 		7BFD0ED3872EE0DDF5E32259 /* libPods-This2That.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-This2That.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE58EDA31F4F927900499607 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "../../../Downloads/GoogleMobileAdsSdkiOS-7.22.0/GoogleMobileAds.framework"; sourceTree = "<group>"; };
 		BE8439371F4F485100FCBB55 /* word_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = word_list.txt; path = "../../../../Library/Mobile Documents/com~apple~TextEdit/Documents/word_list.txt"; sourceTree = "<group>"; };
+		BE99071A1F50EF430071F448 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		BE99071C1F50EF490071F448 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		BEA758511F4F615B00B4EA62 /* aahs.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = aahs.txt; sourceTree = "<group>"; };
 		BEA758521F4F615B00B4EA62 /* aals.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = aals.txt; sourceTree = "<group>"; };
 		BEA758531F4F615B00B4EA62 /* abas.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = abas.txt; sourceTree = "<group>"; };
@@ -7779,7 +7783,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE99071D1F50EF490071F448 /* StoreKit.framework in Frameworks */,
 				505CA5C39B25FA88CA7AF553 /* libPods-This2That.a in Frameworks */,
+				BE99071B1F50EF430071F448 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7812,6 +7818,8 @@
 		BE58EDA21F4F927300499607 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE99071C1F50EF490071F448 /* StoreKit.framework */,
+				BE99071A1F50EF430071F448 /* GameKit.framework */,
 				BE58EDA31F4F927900499607 /* GoogleMobileAds.framework */,
 				7BFD0ED3872EE0DDF5E32259 /* libPods-This2That.a */,
 			);
@@ -11811,13 +11819,13 @@
 					BEF83F9B1F4F363C00DD4B52 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = JSZY8AYXNH;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.InAppPurchase = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -15961,11 +15969,14 @@
 			baseConfigurationReference = 4A728BD311F6F98FA00FA36D /* Pods-This2That.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
 				INFOPLIST_FILE = This2That/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffsApps.Series;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jeffsapps.Series;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9bde7c72-bb60-4b19-a3b9-586c58657b34";
+				PROVISIONING_PROFILE_SPECIFIER = "This2That Dev Profile";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -15975,11 +15986,15 @@
 			baseConfigurationReference = CDFDBC9E641AB90E0E290070 /* Pods-This2That.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
 				INFOPLIST_FILE = This2That/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JeffsApps.Series;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jeffsapps.Series;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0ae2da40-1477-4699-ac01-8cf309f88c60";
+				PROVISIONING_PROFILE_SPECIFIER = "This2That Distribution";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
