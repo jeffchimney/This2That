@@ -115,6 +115,9 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         bannerView.adUnitID = "ca-app-pub-4389649708318146/8092837312"
         
         bannerView.load(GADRequest())
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // retrieve current and high scores when view appears
@@ -186,6 +189,20 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         
         }
         return(false)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            self.view.frame.origin.y += keyboardSize.height
+        }
     }
 
     @IBAction func muteUnmute(sender: AnyObject) {
@@ -612,22 +629,26 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     /// to the user clicking on an ad.
     func adViewWillPresentScreen(_ bannerView: GADBannerView) {
         print("adViewWillPresentScreen")
+        currentWord.becomeFirstResponder()
     }
     
     /// Tells the delegate that the full screen view will be dismissed.
     func adViewWillDismissScreen(_ bannerView: GADBannerView) {
         print("adViewWillDismissScreen")
+        currentWord.becomeFirstResponder()
     }
     
     /// Tells the delegate that the full screen view has been dismissed.
     func adViewDidDismissScreen(_ bannerView: GADBannerView) {
         print("adViewDidDismissScreen")
+        currentWord.becomeFirstResponder()
     }
     
     /// Tells the delegate that a user click will open another app (such as
     /// the App Store), backgrounding the current app.
     func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
         print("adViewWillLeaveApplication")
+        currentWord.becomeFirstResponder()
     }
     
     @IBAction func payForAds(sender: AnyObject) {
