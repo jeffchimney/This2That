@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		505CA5C39B25FA88CA7AF553 /* libPods-This2That.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BFD0ED3872EE0DDF5E32259 /* libPods-This2That.a */; };
+		BE043FD91F51E26F00682CFF /* givePoint.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BE043FD81F51E26F00682CFF /* givePoint.mp3 */; };
+		BE043FDD1F51E82500682CFF /* successfulWordChange.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BE043FDC1F51E82500682CFF /* successfulWordChange.mp3 */; };
+		BE043FDF1F51EBC800682CFF /* failure.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BE043FDE1F51EBC800682CFF /* failure.mp3 */; };
 		BE8439381F4F485100FCBB55 /* word_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = BE8439371F4F485100FCBB55 /* word_list.txt */; };
 		BE99071B1F50EF430071F448 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE99071A1F50EF430071F448 /* GameKit.framework */; };
 		BE99071D1F50EF490071F448 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE99071C1F50EF490071F448 /* StoreKit.framework */; };
@@ -3899,6 +3902,9 @@
 /* Begin PBXFileReference section */
 		4A728BD311F6F98FA00FA36D /* Pods-This2That.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-This2That.debug.xcconfig"; path = "Pods/Target Support Files/Pods-This2That/Pods-This2That.debug.xcconfig"; sourceTree = "<group>"; };
 		7BFD0ED3872EE0DDF5E32259 /* libPods-This2That.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-This2That.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE043FD81F51E26F00682CFF /* givePoint.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = givePoint.mp3; path = ../../../../Music/GarageBand/givePoint.mp3; sourceTree = "<group>"; };
+		BE043FDC1F51E82500682CFF /* successfulWordChange.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = successfulWordChange.mp3; path = ../../../../Music/GarageBand/successfulWordChange.mp3; sourceTree = "<group>"; };
+		BE043FDE1F51EBC800682CFF /* failure.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = failure.mp3; path = ../../../../Music/GarageBand/failure.mp3; sourceTree = "<group>"; };
 		BE58EDA31F4F927900499607 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "../../../Downloads/GoogleMobileAdsSdkiOS-7.22.0/GoogleMobileAds.framework"; sourceTree = "<group>"; };
 		BE8439371F4F485100FCBB55 /* word_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = word_list.txt; path = "../../../../Library/Mobile Documents/com~apple~TextEdit/Documents/word_list.txt"; sourceTree = "<group>"; };
 		BE99071A1F50EF430071F448 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -7760,6 +7766,7 @@
 		BEA7675F1F4F618500B4EA62 /* zoos.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = zoos.txt; sourceTree = "<group>"; };
 		BEA767601F4F618500B4EA62 /* zori.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = zori.txt; sourceTree = "<group>"; };
 		BEA767611F4F618500B4EA62 /* zyme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = zyme.txt; sourceTree = "<group>"; };
+		BED1AB411F5220830003C555 /* This2That.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = This2That.entitlements; sourceTree = "<group>"; };
 		BEF83F9C1F4F363C00DD4B52 /* This2That.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = This2That.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEF83F9F1F4F363C00DD4B52 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BEF83FA41F4F363C00DD4B52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -11715,6 +11722,10 @@
 		BEF83F9E1F4F363C00DD4B52 /* This2That */ = {
 			isa = PBXGroup;
 			children = (
+				BED1AB411F5220830003C555 /* This2That.entitlements */,
+				BE043FDE1F51EBC800682CFF /* failure.mp3 */,
+				BE043FD81F51E26F00682CFF /* givePoint.mp3 */,
+				BE043FDC1F51E82500682CFF /* successfulWordChange.mp3 */,
 				BEF83F9F1F4F363C00DD4B52 /* AppDelegate.swift */,
 				BEF83FD01F4F366300DD4B52 /* ViewController.swift */,
 				BEF83FD21F4F366B00DD4B52 /* HelpViewController.swift */,
@@ -11821,6 +11832,9 @@
 						DevelopmentTeam = JSZY8AYXNH;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.GameCenter = {
 								enabled = 1;
 							};
@@ -12384,6 +12398,7 @@
 				BEA778761F4F701900B4EA62 /* chin.txt in Resources */,
 				BEA778771F4F701900B4EA62 /* chip.txt in Resources */,
 				BEA778781F4F701900B4EA62 /* chis.txt in Resources */,
+				BE043FD91F51E26F00682CFF /* givePoint.mp3 in Resources */,
 				BEA778791F4F701900B4EA62 /* chit.txt in Resources */,
 				BEA7787A1F4F701900B4EA62 /* chon.txt in Resources */,
 				BEA7787B1F4F701900B4EA62 /* chop.txt in Resources */,
@@ -15060,6 +15075,7 @@
 				BEA782EA1F4F702800B4EA62 /* suba.txt in Resources */,
 				BEA782EB1F4F702800B4EA62 /* subs.txt in Resources */,
 				BEA782EC1F4F702800B4EA62 /* such.txt in Resources */,
+				BE043FDF1F51EBC800682CFF /* failure.mp3 in Resources */,
 				BEA782ED1F4F702800B4EA62 /* suck.txt in Resources */,
 				BEA782EE1F4F702900B4EA62 /* sudd.txt in Resources */,
 				BEA782EF1F4F702900B4EA62 /* suds.txt in Resources */,
@@ -15232,6 +15248,7 @@
 				BEA783961F4F702A00B4EA62 /* toby.txt in Resources */,
 				BEA783971F4F702A00B4EA62 /* tods.txt in Resources */,
 				BEA783981F4F702A00B4EA62 /* tody.txt in Resources */,
+				BE043FDD1F51E82500682CFF /* successfulWordChange.mp3 in Resources */,
 				BEA783991F4F702A00B4EA62 /* toea.txt in Resources */,
 				BEA7839A1F4F702A00B4EA62 /* toed.txt in Resources */,
 				BEA7839B1F4F702A00B4EA62 /* toes.txt in Resources */,
@@ -15969,6 +15986,7 @@
 			baseConfigurationReference = 4A728BD311F6F98FA00FA36D /* Pods-This2That.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = This2That/This2That.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
 				INFOPLIST_FILE = This2That/Info.plist;
@@ -15986,6 +16004,7 @@
 			baseConfigurationReference = CDFDBC9E641AB90E0E290070 /* Pods-This2That.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = This2That/This2That.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
@@ -15993,8 +16012,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jeffsapps.Series;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0ae2da40-1477-4699-ac01-8cf309f88c60";
-				PROVISIONING_PROFILE_SPECIFIER = "This2That Distribution";
+				PROVISIONING_PROFILE = "91fa02c3-3a2d-4992-903d-8795769b817b";
+				PROVISIONING_PROFILE_SPECIFIER = This2ThatDistro;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

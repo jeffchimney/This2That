@@ -62,11 +62,13 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         SKPaymentQueue.default().add(self)
         
         //Check if ads have been removed
-//        if (defaults.bool(forKey: "purchased")){
-//
-//        }
-//        else {
-//        }
+        let purchased = defaults.value(forKey: "purchased")
+        if purchased != nil {
+            hasPaidToRemoveAds = true
+        }
+        else {
+            hasPaidToRemoveAds = false
+        }
         
         adCount = 0
         muted = false
@@ -106,7 +108,14 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         bannerView.adSize = kGADAdSizeBanner
         bannerView.adUnitID = "ca-app-pub-4389649708318146/8092837312"
         
-        bannerView.load(GADRequest())
+        if !hasPaidToRemoveAds {
+            bannerView.load(GADRequest())
+        } else {
+            bannerViewTopConstraint.constant = -51
+            UIView.animate(withDuration: 1, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+            })
+        }
     }
     
     // retrieve current and high scores when view appears
@@ -237,6 +246,9 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
                     scoreThisGame.text = String(Int(scoreThisGame.text!)! + 1)
                     
                     self.startWord.text = self.randomizeWord()
+                    if self.startWord.text == "imam" {
+                        self.startWord.text = self.randomizeWord()
+                    }
                     self.randomWordsChosen.append(self.startWord.text!)
                     var intermediateWord = self.randomizeWordFromText(seedWord: self.startWord.text!)
                     
@@ -283,7 +295,7 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         // if hasnt bought free skips yet
         if numberOfFreeSkips == 0 {
             // play change word sound
-            //self.playSoundWithName(fileName: "successfulWordChange")
+            self.playSoundWithName(fileName: "successfulWordChange")
             
             self.successfulWords.removeAll()
             
@@ -559,25 +571,24 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     //////////////////////SOUND EFFECTS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     
     func playSoundWithName(fileName: String) {
-//        if muted == false {
-//
-//            let alertSound = NSURL(fileURLWithPath: Bundle.main.path(forResource: fileName, ofType: "m4a")!)
-//
-//            var _:NSError?
-//
-//            do {
-//                try audioPlayer = AVAudioPlayer(contentsOf: alertSound as URL)
-//
-//                if fileName == "failure" {
-//                audioPlayer.volume = 0.25
-//                }
-//
-//                audioPlayer.prepareToPlay()
-//                audioPlayer.play()
-//            } catch _ {
-//
-//            }
-//        }
+        let alertSound = NSURL(fileURLWithPath: Bundle.main.path(forResource: fileName, ofType: "mp3")!)
+    
+        var _:NSError?
+    
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+            try AVAudioSession.sharedInstance().setActive(true)
+            try audioPlayer = AVAudioPlayer(contentsOf: alertSound as URL)
+            
+            if fileName == "failure" {
+                audioPlayer.volume = 0.25
+            }
+            
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+        } catch _ {
+            
+        }
     }
     
     ////////////////////////////////// AD FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -718,32 +729,30 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
             if let trans:SKPaymentTransaction = transaction as? SKPaymentTransaction{
                 switch trans.transactionState {
                 case .purchased:
-                    //print("Product Purchased");
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
-                    
-                    //print(currentlyBuying)
                     if currentlyBuying == 2 {
                         //disable ads
-                        
                         defaults.set(true , forKey: "purchased")
                         hasPaidToRemoveAds = true
+                        bannerView.isHidden = true
+                        
+                        bannerViewTopConstraint.constant = -51
+                        UIView.animate(withDuration: 1, animations: { () -> Void in
+                            self.view.layoutIfNeeded()
+                        })
                         
                     } else {
                         //add free skips
-                        
                         self.numberOfFreeSkips = self.numberOfFreeSkips + 2
                         self.nextWord.setTitle(String(self.numberOfFreeSkips), for: UIControlState.normal)
                         self.saveScores(highScoreSave: self.highScore.text!, currentScoreSave: self.scoreThisGame.text!, currentNumberSkips: self.numberOfFreeSkips)
                     }
                     break;
                 case .failed:
-                    //print(currentlyBuying)
-                    //print("Purchased Failed");
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
                     break;
                     
                 case .restored:
-                    //print("Already Purchased");
                     SKPaymentQueue.default().restoreCompletedTransactions()
                     
                 default:
@@ -760,6 +769,15 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     }
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         //print("RestoreFinished")
+        //disable ads
+        defaults.set(true , forKey: "purchased")
+        hasPaidToRemoveAds = true
+        bannerView.isHidden = true
+        
+        bannerViewTopConstraint.constant = -51
+        UIView.animate(withDuration: 1, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+        })
     }
 }
 
