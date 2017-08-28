@@ -15996,6 +15996,7 @@
 				PROVISIONING_PROFILE = "9bde7c72-bb60-4b19-a3b9-586c58657b34";
 				PROVISIONING_PROFILE_SPECIFIER = "This2That Dev Profile";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -16012,9 +16013,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jeffsapps.Series;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "91fa02c3-3a2d-4992-903d-8795769b817b";
-				PROVISIONING_PROFILE_SPECIFIER = This2ThatDistro;
+				PROVISIONING_PROFILE = "0ae2da40-1477-4699-ac01-8cf309f88c60";
+				PROVISIONING_PROFILE_SPECIFIER = "This2That Distribution";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

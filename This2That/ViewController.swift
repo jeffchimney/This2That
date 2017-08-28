@@ -34,6 +34,7 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
     var adCount: Int!
     var hasPaidToRemoveAds = false
     var keyboardHeight: CGFloat = 0
+    @IBOutlet weak var endWordYConstraint: NSLayoutConstraint!
     
     // set up audio player and controls
     var audioPlayer = AVAudioPlayer()
@@ -129,6 +130,32 @@ class ViewController: UIViewController, UITextFieldDelegate, SKProductsRequestDe
         self.loadScores()
         if numberOfFreeSkips != 0 {
             nextWord.setTitle(String(numberOfFreeSkips), for: UIControlState.normal)
+        }
+        adjustConstraints()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        adjustConstraints()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        adjustConstraints()
+    }
+    
+    func adjustConstraints() {
+        if let isRunningInFullScreen = UIApplication.shared.delegate?.window!?.frame.equalTo((UIApplication.shared.delegate?.window!?.screen.bounds)!) {
+            if UIDevice.current.orientation.isLandscape || !isRunningInFullScreen {
+                endWordYConstraint.constant = -65
+                UIView.animate(withDuration: 1, animations: {
+                    self.view.layoutIfNeeded()
+                })
+                
+            } else {
+                endWordYConstraint.constant = -11
+                UIView.animate(withDuration: 1, animations: {
+                    self.view.layoutIfNeeded()
+                })
+            }
         }
     }
 
